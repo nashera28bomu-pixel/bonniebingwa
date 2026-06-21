@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CymorVCF — Collect contacts. Release the manifest.</title>
+<meta name="description" content="Create a contact-collection session, share the link, and export everyone into one VCF file when you're ready.">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="topbar shell">
+  <div class="brand"><span class="dot"></span> CYMORVCF</div>
+  <a href="/super" class="btn btn-ghost" style="padding:9px 16px;font-size:13px;">Owner access</a>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="shell" style="padding:64px 24px 56px;">
+  <div style="max-width:680px;">
+    <span class="badge badge-live" style="margin-bottom:20px;"><span class="pulse"></span> Live manifests open now</span>
+    <h1 style="font-size:clamp(32px,5vw,52px);font-weight:700;margin-bottom:18px;">
+      Open a session.<br>Collect contacts.<br><span style="color:var(--signal);">Release the file.</span>
+    </h1>
+    <p style="font-size:16.5px;color:var(--muted);max-width:480px;margin-bottom:32px;">
+      Share one link. Everyone who joins lands in your waiting room until you're ready —
+      then export the whole manifest as a single VCF, all at once.
+    </p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="#create" class="btn btn-primary">Create your VCF session</a>
+      <a href="#manifests" class="btn btn-ghost">Browse open sessions</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CREATE FORM ============ -->
+<section id="create" class="shell" style="padding:40px 24px 72px;">
+  <div class="ticket" style="max-width:620px;margin:0 auto;grid-template-columns:1fr;">
+    <div class="ticket-main" style="border-right:none;">
+      <span class="ticket-eyebrow">New session</span>
+      <h2 style="font-size:24px;margin-bottom:6px;">Set up your manifest</h2>
+      <p class="muted" style="font-size:13.5px;margin-bottom:28px;">Takes under a minute. You'll get a join link and a private admin link — save the admin link, it's the only way back in.</p>
+
+      <form id="createForm">
+        <div class="field">
+          <label for="title">Session title <span class="field-required">*</span></label>
+          <input type="text" id="title" placeholder="e.g. World Cup Bot Subscribers" required maxlength="80">
+        </div>
+
+        <div class="field">
+          <label for="description">Description <span class="field-optional-tag">optional</span></label>
+          <textarea id="description" rows="2" placeholder="What is this list for? Shown to people before they join."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="whatsappGroupLink">WhatsApp group link <span class="field-optional-tag">optional</span></label>
+          <input type="url" id="whatsappGroupLink" placeholder="https://chat.whatsapp.com/...">
+          <span class="hint">People are redirected here right after they join, to wait for your file.</span>
+        </div>
+
+        <div class="field">
+          <label for="targetCount">Target number of contacts <span class="field-optional-tag">optional</span></label>
+          <input type="number" id="targetCount" placeholder="e.g. 500" min="0">
+          <span class="hint">Shown as a live progress bar on your dashboard. Leave blank for no target.</span>
+        </div>
+
+        <hr class="divider">
+
+        <p class="mono" style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">Admin access — protects your dashboard</p>
+
+        <div class="field">
+          <label for="ownerPhone">Your phone number <span class="field-required">*</span></label>
+          <input type="tel" id="ownerPhone" placeholder="e.g. 0712345678" required>
+        </div>
+
+        <div class="field">
+          <label for="ownerPin">Set a 4+ digit PIN <span class="field-required">*</span></label>
+          <input type="password" id="ownerPin" inputmode="numeric" placeholder="••••" required minlength="4">
+          <span class="hint">Keep this safe — paired with your phone, it identifies you as this session's owner.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="createBtn">Create session</button>
+      </form>
+
+      <div id="createResult" style="display:none;margin-top:22px;padding:18px;background:var(--surface-raised);border:1px solid var(--line);border-radius:var(--radius-sm);">
+        <p style="font-size:13px;color:var(--signal);font-weight:600;margin-bottom:10px;">✓ Session created</p>
+        <div style="margin-bottom:12px;">
+          <span class="hint" style="margin:0 0 4px;">Share this join link:</span>
+          <div class="mono" id="joinLinkOut" style="font-size:13px;background:var(--surface);padding:10px 12px;border-radius:6px;word-break:break-all;"></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <span class="hint" style="margin:0 0 4px;color:var(--warn);">Save this admin link now — it won't be shown again:</span>
+          <div class="mono" id="adminLinkOut" style="font-size:13px;background:var(--surface);padding:10px 12px;border-radius:6px;word-break:break-all;"></div>
+        </div>
+        <a id="goToAdminBtn" href="#" class="btn btn-primary btn-block">Go to my dashboard</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE MANIFESTS ============ -->
+<section id="manifests" class="shell" style="padding:20px 24px 90px;">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;">
+    <h2 style="font-size:24px;">Open sessions</h2>
+    <span class="muted mono" style="font-size:12.5px;">Tap any ticket to join</span>
+  </div>
+  <div id="manifestGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
+    <div class="muted" style="grid-column:1/-1;text-align:center;padding:40px;">Loading sessions…</div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
