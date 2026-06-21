@@ -476,9 +476,49 @@ input, select, textarea {
   to { transform: rotate(360deg); }
 }
 
+/* ---------- Admin dashboard two-column layout ---------- */
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.join-link-row {
+  display: flex;
+  gap: 8px;
+}
+
+.join-link-row input {
+  min-width: 0; /* allows the input to actually shrink instead of forcing overflow */
+}
+
 @media (max-width: 640px) {
   .ticket { grid-template-columns: 1fr; }
   .ticket-main { border-right: none; border-bottom: 1px dashed var(--line); }
   .ticket-stub { flex-direction: row; gap: 8px; padding: 12px; }
   .ticket-stub::before, .ticket-stub::after { display: none; }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .join-link-row {
+    flex-direction: column;
+  }
+
+  .join-link-row button {
+    width: 100%;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }
