@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join session — CymorVCF</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="topbar shell">
+  <a href="/" class="brand"><span class="dot"></span> CYMORVCF</a>
+</header>
+
+<section class="shell-narrow" style="padding:40px 24px 80px;">
+
+  <div id="loadingState" class="empty-state">
+    <div class="spinner" style="margin:0 auto 14px;border-top-color:var(--signal);border-color:var(--line);"></div>
+    Loading session…
+  </div>
+
+  <div id="notFoundState" style="display:none;" class="empty-state">
+    <h3>Session not found</h3>
+    <p>This link may have expired, or the admin closed it. Check the link and try again.</p>
+  </div>
+
+  <div id="sessionContent" style="display:none;">
+
+    <!-- ===== Step indicator ===== -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:28px;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">
+      <span id="stepIndicator1" style="color:var(--signal);">① Fill details</span>
+      <span>→</span>
+      <span id="stepIndicator2">② Verify</span>
+      <span>→</span>
+      <span id="stepIndicator3">③ Wait for file</span>
+    </div>
+
+    <!-- ===== Session info ticket ===== -->
+    <div class="ticket" style="margin-bottom:28px;">
+      <div class="ticket-main">
+        <span class="ticket-eyebrow">You're joining</span>
+        <h1 class="ticket-title" id="sessionTitle" style="font-size:22px;"></h1>
+        <p class="ticket-desc" id="sessionDesc" style="-webkit-line-clamp:4;"></p>
+      </div>
+      <div class="ticket-stub">
+        <div class="stub-count" id="sessionCount">0</div>
+        <div class="stub-label" id="sessionCountLabel">joined</div>
+      </div>
+    </div>
+
+    <!-- ===== Instructions panel ===== -->
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:28px;">
+      <p style="font-size:13.5px;font-weight:600;margin-bottom:10px;">How this works</p>
+      <ol style="margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);line-height:1.8;">
+        <li>Fill in your name and phone number below (email is optional).</li>
+        <li>Tap <strong style="color:var(--paper);">Verify and join</strong> — this adds you to the list.</li>
+        <li>You'll be redirected to a WhatsApp group automatically. <strong style="color:var(--paper);">Stay in that group</strong> — that's where the organizer will share the contact file once it's ready. Don't leave early or you may miss it.</li>
+      </ol>
+    </div>
+
+    <!-- ===== Form ===== -->
+    <form id="joinForm">
+      <div class="field">
+        <label for="name">Full name <span class="field-required">*</span></label>
+        <input type="text" id="name" placeholder="e.g. Jane Wanjiru" required maxlength="80" autocomplete="name">
+        <span class="hint">This is exactly how your name will appear in the exported contact file.</span>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone number <span class="field-required">*</span></label>
+        <input type="tel" id="phone" placeholder="e.g. 0712345678 or +254712345678" required autocomplete="tel">
+        <span class="hint">Include your country code if outside Kenya. This is the number that gets saved as your contact.</span>
+        <span class="field-error" id="phoneError">Enter a valid phone number.</span>
+      </div>
+
+      <div class="field">
+        <label for="email">Email <span class="field-optional-tag">optional</span></label>
+        <input type="email" id="email" placeholder="e.g. jane@example.com" autocomplete="email">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="joinBtn">Verify and join</button>
+      <p class="hint center" style="margin-top:12px;">By joining, you agree to share these details with the session organizer.</p>
+    </form>
+
+    <!-- ===== Success state ===== -->
+    <div id="successState" style="display:none;text-align:center;padding:30px 10px;">
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(61,220,151,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:24px;color:var(--signal);">✓</div>
+      <h2 style="font-size:20px;margin-bottom:8px;">You're on the list</h2>
+      <p class="muted" id="successMessage" style="margin-bottom:24px;font-size:14px;">Redirecting you to the WhatsApp group to wait for the file…</p>
+      <a href="#" id="whatsappRedirectBtn" class="btn btn-primary btn-block">Go to WhatsApp group now</a>
+      <p class="hint" style="margin-top:14px;">Didn't get redirected? Tap the button above. Stay in the group until the organizer shares the file.</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/main.js"></script>
+<script src="/js/join.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin dashboard — CymorVCF</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="topbar shell">
+  <a href="/" class="brand"><span class="dot"></span> CYMORVCF</a>
+  <span class="badge badge-live"><span class="pulse"></span> Live</span>
+</header>
+
+<section class="shell" style="padding:32px 24px 90px;">
+
+  <div id="loadingState" class="empty-state">
+    <div class="spinner" style="margin:0 auto 14px;border-top-color:var(--signal);border-color:var(--line);"></div>
+    Loading dashboard…
+  </div>
+
+  <div id="notFoundState" style="display:none;" class="empty-state">
+    <h3>Admin link not recognized</h3>
+    <p>Double-check the link you saved when you created this session.</p>
+  </div>
+
+  <div id="dashboardContent" style="display:none;">
+
+    <!-- ===== Header ===== -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div>
+        <span class="ticket-eyebrow" style="margin-bottom:8px;">Session dashboard</span>
+        <h1 id="sessionTitle" style="font-size:28px;"></h1>
+      </div>
+      <a href="#" id="exportBtn" class="btn btn-primary">⬇ Export VCF</a>
+    </div>
+    <p class="muted" id="sessionDesc" style="margin-bottom:28px;font-size:14px;"></p>
+
+    <!-- ===== Progress ===== -->
+    <div id="progressWrap" style="margin-bottom:28px;">
+      <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-bottom:8px;">
+        <span id="progressLabel">0 / 0 joined</span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+    </div>
+
+    <!-- ===== Stats ===== -->
+    <div class="stat-grid" style="margin-bottom:32px;">
+      <div class="stat-block">
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Total contacts</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value" id="statDupes">0</div>
+        <div class="stat-label">Duplicates flagged</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value" id="statCountries">0</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value" id="statLive">0</div>
+        <div class="stat-label">Joined this session</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:24px;margin-bottom:32px;" id="mainGrid">
+
+      <!-- ===== Live join feed ===== -->
+      <div>
+        <h2 style="font-size:16px;margin-bottom:14px;">Live join feed</h2>
+        <div id="liveFeed" style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);max-height:340px;overflow-y:auto;">
+          <div class="empty-state" id="liveFeedEmpty" style="padding:30px;">
+            <p style="font-size:13px;">Waiting for new joins — this updates in real time.</p>
+          </div>
+        </div>
+
+        <h2 style="font-size:16px;margin:24px 0 14px;">All contacts</h2>
+        <div id="contactsList" style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);max-height:420px;overflow-y:auto;"></div>
+      </div>
+
+      <!-- ===== Settings panel ===== -->
+      <div>
+        <h2 style="font-size:16px;margin-bottom:14px;">Country breakdown</h2>
+        <div id="countryBreakdown" style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:24px;"></div>
+
+        <h2 style="font-size:16px;margin-bottom:14px;">Settings</h2>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;">
+
+          <div class="field">
+            <label for="joinLinkField">Join link</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="joinLinkField" readonly class="mono" style="font-size:12.5px;">
+              <button type="button" class="btn btn-ghost" id="copyJoinLink" style="padding:10px 14px;white-space:nowrap;">Copy</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="whatsappLinkInput">WhatsApp group link</label>
+            <input type="url" id="whatsappLinkInput" placeholder="https://chat.whatsapp.com/...">
+          </div>
+
+          <div class="field">
+            <label for="targetCountInput">Target contact count</label>
+            <input type="number" id="targetCountInput" min="0" placeholder="0 = no target">
+          </div>
+
+          <div class="field">
+            <label for="emojiPrefixInput">Emoji prefix for exported names</label>
+            <input type="text" id="emojiPrefixInput" placeholder="e.g. 🔥" maxlength="4">
+            <span class="hint">Added before each name only in the exported file — e.g. "🔥 Jane Wanjiru". Doesn't change stored data.</span>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-block" id="saveSettingsBtn">Save settings</button>
+
+          <hr class="divider">
+
+          <button type="button" class="btn btn-warn btn-block" id="dedupeBtn">Remove duplicate numbers</button>
+          <p class="hint center" style="margin-top:10px;">Keeps the first entry for each phone number, removes the rest.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

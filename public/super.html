@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owner access — CymorVCF</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="topbar shell">
+  <a href="/" class="brand"><span class="dot"></span> CYMORVCF</a>
+  <span class="mono muted" style="font-size:12px;">Owner panel</span>
+</header>
+
+<section class="shell" style="padding:40px 24px 90px;">
+
+  <!-- ===== Key gate ===== -->
+  <div id="keyGate" class="shell-narrow" style="padding:0;">
+    <h1 style="font-size:24px;margin-bottom:8px;">Owner access</h1>
+    <p class="muted" style="font-size:14px;margin-bottom:24px;">Enter your superadmin key to view every session on the platform.</p>
+    <div class="field">
+      <label for="superKeyInput">Superadmin key</label>
+      <input type="password" id="superKeyInput" placeholder="Paste your key">
+    </div>
+    <button class="btn btn-primary btn-block" id="unlockBtn">Unlock</button>
+  </div>
+
+  <!-- ===== Main panel ===== -->
+  <div id="superContent" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div>
+        <span class="ticket-eyebrow">All sessions</span>
+        <h1 style="font-size:28px;">Platform manifest</h1>
+      </div>
+      <a href="#" id="exportAllBtn" class="btn btn-primary">⬇ Download all contacts</a>
+    </div>
+    <p class="muted" style="margin-bottom:28px;font-size:14px;">Every session created on CymorVCF, across all admins.</p>
+
+    <div class="stat-grid" style="margin-bottom:32px;">
+      <div class="stat-block">
+        <div class="stat-value" id="statSessions">0</div>
+        <div class="stat-label">Total sessions</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value" id="statContacts">0</div>
+        <div class="stat-label">Total contacts</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value" id="statActive">0</div>
+        <div class="stat-label">Active sessions</div>
+      </div>
+    </div>
+
+    <div id="sessionsTable" style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;"></div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/main.js"></script>
+<script src="/js/super.js"></script>
+</body>
+</html>
